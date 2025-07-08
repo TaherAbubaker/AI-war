@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Joke Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #1e3c72, #2a5298);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      transition: background 0.5s ease;
+    }
+    .container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    .joke-box {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      min-height: 80px;
+      transition: opacity 0.4s ease;
+    }
+    button {
+      background: #00d1b2;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #00a88b;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>😂 Joke Generator</h1>
+    <div class="joke-box" id="jokeBox">Click the button to get a joke!</div>
+    <button onclick="showJoke()">Tell me a joke</button>
+  </div>
+
+  <script>
+    const jokes = [
+      "Why don't skeletons fight each other? Because they don't have the guts.",
+      "I'm reading a book about anti-gravity. It's impossible to put down!",
+      "Why did the scarecrow win an award? Because he was outstanding in his field!",
+      "I told my wife she was drawing her eyebrows too high. She looked surprised.",
+      "Why don't scientists trust atoms? Because they make up everything!",
+      "I asked my dog what's two minus two. He said nothing.",
+      "Why can't you hear a pterodactyl go to the bathroom? Because the 'P' is silent.",
+      "What do you call fake spaghetti? An impasta.",
+      "Why did the math book look sad? Because it had too many problems.",
+      "What’s orange and sounds like a parrot? A carrot!",
+      "Parallel lines have so much in common. It’s a shame they’ll never meet.",
+      "I told my computer I needed a break, and now it won't stop sending me beach pics.",
+      "Why did the coffee file a police report? It got mugged.",
+      "I would tell you a joke about construction, but I'm still working on it.",
+      "Want to hear a roof joke? Never mind, it’s over your head.",
+      "I made a pun about the wind but it blows.",
+      "Why did the gym close down? It just didn’t work out.",
+      "How do you organize a space party? You planet.",
+      "I don’t trust stairs. They’re always up to something.",
+      "Why did the banana go to the doctor? It wasn’t peeling well.",
+      "Why was the broom late? It swept in.",
+      "How do you catch a squirrel? Climb a tree and act like a nut.",
+      "Why don’t some couples go to the gym? Because some relationships don’t work out.",
+      "I bought some shoes from a drug dealer. I don’t know what he laced them with but I was tripping all day.",
+      "Why can’t your nose be 12 inches long? Because then it would be a foot.",
+      "I'm so good at sleeping, I can do it with my eyes closed.",
+      "What did the buffalo say to his son when he left? Bison.",
+      "Why did the chicken go to the seance? To talk to the other side.",
+      "What do you call cheese that isn't yours? Nacho cheese.",
+      "Why did the golfer bring two pairs of pants? In case he got a hole in one.",
+      "Why don't oysters share their pearls? Because they’re shellfish.",
+      "Why did the man get hit by a bike every day? He was stuck in a vicious cycle.",
+      "My wife told me I should do lunges to stay in shape. That would be a big step forward.",
+      "Why can’t Elsa have a balloon? Because she will let it go.",
+      "What do you call a magic dog? A labracadabrador.",
+      "Why are elevator jokes so good? They work on many levels.",
+      "Why was the math teacher late to work? She took the wrong bus and got a sum-mons.",
+      "How do you make a tissue dance? Put a little boogie in it.",
+      "Why did the tomato blush? Because it saw the salad dressing.",
+      "Why don't we ever tell secrets on a farm? Because the potatoes have eyes and the corn has ears.",
+      "I told my friend 10 jokes to make him laugh. Sadly, no pun in ten did.",
+      "How does a penguin build its house? Igloos it together.",
+      "What do you call a belt made of watches? A waist of time.",
+      "What happens when frogs park illegally? They get toad.",
+      "I'm on a seafood diet. I see food and I eat it.",
+      "What's the best time to go to the dentist? Tooth-hurty.",
+      "Why don’t crabs give to charity? Because they’re shellfish.",
+      "I couldn’t figure out how to put my seatbelt on. Then it clicked."
+    ];
+
+    let usedJokes = [];
+
+    function showJoke() {
+      if (usedJokes.length === jokes.length) {
+        usedJokes = [];
+      }
+
+      let joke;
+      do {
+        joke = jokes[Math.floor(Math.random() * jokes.length)];
+      } while (usedJokes.includes(joke));
+
+      usedJokes.push(joke);
+
+      const jokeBox = document.getElementById("jokeBox");
+      jokeBox.style.opacity = 0;
+      setTimeout(() => {
+        jokeBox.textContent = joke;
+        jokeBox.style.opacity = 1;
+      }, 300);
+    }
+  </script>
+</body>
+</html>

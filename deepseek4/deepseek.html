@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidSpark | YouTube Idea Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF0000;
+            --primary-light: #FF4D4D;
+            --secondary: #282828;
+            --accent: #FFD600;
+            --light: #F9F9F9;
+            --dark: #212121;
+            --text: #333333;
+            --text-light: #606060;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            
+            /* Dark mode variables */
+            --dark-text: #F1F1F1;
+            --dark-text-light: #AAAAAA;
+            --dark-card-bg: #383838;
+        }
+        
+        .dark-mode {
+            --light: var(--dark);
+            --text: var(--dark-text);
+            --text-light: var(--dark-text-light);
+            --card-bg: var(--dark-card-bg);
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light);
+            color: var(--text);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .navbar-brand span {
+            color: var(--text);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 60px 0;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .generator-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .generator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .genre-btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .genre-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: var(--light);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .genre-btn:hover, .genre-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .idea-display {
+            min-height: 150px;
+            background-color: rgba(255, 0, 0, 0.05);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 1.2rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .idea-display.empty {
+            background-color: rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--text-light);
+            color: var(--text-light);
+        }
+        
+        .action-btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary-light);
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .favorites-section {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+        }
+        
+        .favorite-item {
+            padding: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .favorite-item:last-child {
+            border-bottom: none;
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--text);
+            cursor: pointer;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .genre-icon {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">Vid<span>Spark</span></a>
+            <button class="theme-toggle" id="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+    
+    <div class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-3">YouTube Video Idea Generator</h1>
+            <p class="lead">Beat creator's block with endless content ideas</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="generator-card fade-in">
+                    <h3 class="mb-4"><i class="fas fa-lightbulb text-warning me-2"></i> Generate Ideas</h3>
+                    
+                    <div class="genre-btns" id="genre-btns">
+                        <!-- Genre buttons will be added dynamically -->
+                    </div>
+                    
+                    <div class="idea-display empty" id="idea-display">
+                        Select a genre and click "Generate Idea"
+                    </div>
+                    
+                    <div class="action-btns">
+                        <button class="btn btn-primary" id="generate-btn">
+                            <i class="fas fa-bolt me-2"></i> Generate Idea
+                        </button>
+                        <button class="btn btn-outline-primary" id="favorite-btn" disabled>
+                            <i class="far fa-heart me-2"></i> Favorite
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="favorites-section">
+                    <h4 class="mb-4"><i class="fas fa-star text-warning me-2"></i> Your Favorites</h4>
+                    <div id="favorites-list">
+                        <p class="text-muted">No favorites yet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const genreBtns = document.getElementById('genre-btns');
+            const ideaDisplay = document.getElementById('idea-display');
+            const generateBtn = document.getElementById('generate-btn');
+            const favoriteBtn = document.getElementById('favorite-btn');
+            const favoritesList = document.getElementById('favorites-list');
+            const themeToggle = document.getElementById('theme-toggle');
+            
+            // State
+            let currentGenre = null;
+            let currentIdea = null;
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            
+            // Video Ideas Database
+            const videoIdeas = {
+                'gaming': [
+                    "24-Hour Gaming Challenge: Can I Survive?",
+                    "Reacting to My First Ever YouTube Video",
+                    "Building the Ultimate Gaming Setup on a Budget",
+                    "Playing Horror Games at 3AM (Gone Wrong)",
+                    "Ranking Every Console I've Ever Owned",
+                    "Speedrunning My Favorite Childhood Game",
+                    "When Pros Play vs When I Play (Funny Comparison)",
+                    "The Evolution of Gaming Graphics (2000-2023)",
+                    "Trying to Beat a Game Without Taking Damage",
+                    "Gaming with My Grandma for a Week"
+                ],
+                'tech': [
+                    "Unboxing the Newest Smartphone - First Look",
+                    "Does the $1000 Gaming PC Beat Consoles?",
+                    "Tech I Can't Live Without in 2023",
+                    "Building a PC with Only Wish.com Parts",
+                    "The Future of AI - What's Coming Next?",
+                    "Cheap vs Expensive Tech - Is It Worth It?",
+                    "My Smart Home Setup Tour (2023 Edition)",
+                    "Tech Accessories You Didn't Know You Needed",
+                    "Why I Switched from iPhone to Android",
+                    "Testing Viral Tech Products on TikTok"
+                ],
+                'vlogs': [
+                    "A Day in My Life as a YouTuber",
+                    "Moving to a New City - The Big Decision",
+                    "24 Hours Without My Phone Challenge",
+                    "Meet My Pets! (Full Introduction)",
+                    "What I Eat in a Week (Healthy Edition)",
+                    "Morning Routine That Changed My Life",
+                    "Answering Your Most Personal Questions",
+                    "Traveling Alone for the First Time",
+                    "Behind the Scenes of Making Videos",
+                    "My Biggest Regrets and Lessons Learned"
+                ],
+                'comedy': [
+                    "Trying to Go Viral with TikTok Trends",
+                    "When You Let Your Little Brother Edit Your Video",
+                    "Public Prank Gone Wrong (Police Called)",
+                    "Texting My Crush Using Only Memes",
+                    "Reacting to My Old Instagram Photos",
+                    "If Apps Were People (Funny Skit)",
+                    "Reading My Childhood Diary (So Cringe)",
+                    "Ordering Random Food Combinations",
+                    "Trying to Speak Only in Movie Quotes",
+                    "When You Try to Be Productive But..."
+                ],
+                'education': [
+                    "How to Start a YouTube Channel in 2023",
+                    "The Science of Productivity - What Actually Works",
+                    "Learning a New Language in 30 Days",
+                    "History Facts That Will Blow Your Mind",
+                    "How Social Media Affects Your Brain",
+                    "Debunking Common Health Myths",
+                    "The Psychology of First Impressions",
+                    "How to Make Money Online (Real Methods)",
+                    "Book Summaries That Changed My Life",
+                    "Time Management Tips for Students"
+                ],
+                'cooking': [
+                    "3 Easy Meals for College Students",
+                    "Trying Gordon Ramsay's Recipes at Home",
+                    "Baking Without Measuring (Chaotic)",
+                    "Only Eating Food from One Country for a Week",
+                    "5 Minute Microwave Meals Taste Test",
+                    "When a Chef Cooks vs When I Cook",
+                    "Recreating Viral Food Hacks",
+                    "Healthy Meal Prep for Weight Loss",
+                    "Cooking with Only Dollar Store Ingredients",
+                    "Grandma's Secret Recipe Revealed"
+                ],
+                'fitness': [
+                    "30 Day Fitness Transformation (Real Results)",
+                    "Trying the Celebrity Workout Routine",
+                    "Does 10,000 Steps a Day Actually Work?",
+                    "Home Workouts vs Gym - Which is Better?",
+                    "My Exact Diet for Building Muscle",
+                    "Yoga for Complete Beginners (30 Day Challenge)",
+                    "Testing Fitness Myths with Science",
+                    "Morning vs Evening Workouts - Which Wins?",
+                    "How I Lost 50 Pounds (Full Journey)",
+                    "No Equipment Workout Challenge"
+                ]
+            };
+            
+            // Genre icons
+            const genreIcons = {
+                'gaming': 'fa-gamepad',
+                'tech': 'fa-laptop-code',
+                'vlogs': 'fa-video',
+                'comedy': 'fa-laugh-squint',
+                'education': 'fa-graduation-cap',
+                'cooking': 'fa-utensils',
+                'fitness': 'fa-dumbbell'
+            };
+            
+            // Initialize
+            createGenreButtons();
+            renderFavorites();
+            checkDarkMode();
+            
+            // Event Listeners
+            generateBtn.addEventListener('click', generateIdea);
+            favoriteBtn.addEventListener('click', toggleFavorite);
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Functions
+            function createGenreButtons() {
+                Object.keys(videoIdeas).forEach(genre => {
+                    const btn = document.createElement('button');
+                    btn.className = 'genre-btn';
+                    btn.innerHTML = `<i class="fas ${genreIcons[genre]} genre-icon"></i>${capitalizeFirstLetter(genre)}`;
+                    btn.dataset.genre = genre;
+                    
+                    btn.addEventListener('click', () => {
+                        currentGenre = genre;
+                        document.querySelectorAll('.genre-btn').forEach(b => 
+                            b.classList.remove('active')
+                        );
+                        btn.classList.add('active');
+                        favoriteBtn.disabled = true;
+                    });
+                    
+                    genreBtns.appendChild(btn);
+                });
+            }
+            
+            function generateIdea() {
+                if (!currentGenre) {
+                    alert('Please select a genre first!');
+                    return;
+                }
+                
+                const ideas = videoIdeas[currentGenre];
+                const randomIndex = Math.floor(Math.random() * ideas.length);
+                currentIdea = ideas[randomIndex];
+                
+                // Update display
+                ideaDisplay.textContent = currentIdea;
+                ideaDisplay.classList.remove('empty');
+                ideaDisplay.classList.add('fade-in');
+                
+                // Enable favorite button
+                favoriteBtn.disabled = false;
+                
+                // Check if already favorited
+                const isFavorited = favorites.some(fav => 
+                    fav.idea === currentIdea && fav.genre === currentGenre
+                );
+                
+                updateFavoriteButton(isFavorited);
+            }
+            
+            function toggleFavorite() {
+                const favorite = {
+                    genre: currentGenre,
+                    idea: currentIdea,
+                    icon: genreIcons[currentGenre]
+                };
+                
+                const existingIndex = favorites.findIndex(fav => 
+                    fav.idea === currentIdea && fav.genre === currentGenre
+                );
+                
+                if (existingIndex >= 0) {
+                    // Remove from favorites
+                    favorites.splice(existingIndex, 1);
+                    updateFavoriteButton(false);
+                } else {
+                    // Add to favorites
+                    favorites.push(favorite);
+                    updateFavoriteButton(true);
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                renderFavorites();
+            }
+            
+            function updateFavoriteButton(isFavorited) {
+                if (isFavorited) {
+                    favoriteBtn.innerHTML = '<i class="fas fa-heart me-2"></i> Favorited';
+                    favoriteBtn.classList.add('btn-primary');
+                    favoriteBtn.classList.remove('btn-outline-primary');
+                } else {
+                    favoriteBtn.innerHTML = '<i class="far fa-heart me-2"></i> Favorite';
+                    favoriteBtn.classList.add('btn-outline-primary');
+                    favoriteBtn.classList.remove('btn-primary');
+                }
+            }
+            
+            function renderFavorites() {
+                if (favorites.length === 0) {
+                    favoritesList.innerHTML = '<p class="text-muted">No favorites yet</p>';
+                    return;
+                }
+                
+                favoritesList.innerHTML = '';
+                favorites.forEach((fav, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'favorite-item';
+                    item.innerHTML = `
+                        <div>
+                            <i class="fas ${fav.icon} me-2"></i>
+                            ${fav.idea}
+                        </div>
+                        <button class="btn btn-sm btn-outline-danger remove-favorite" data-index="${index}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    favoritesList.appendChild(item);
+                });
+                
+                // Add event listeners to remove buttons
+                document.querySelectorAll('.remove-favorite').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.dataset.index);
+                        favorites.splice(index, 1);
+                        localStorage.setItem('favorites', JSON.stringify(favorites));
+                        renderFavorites();
+                        
+                        // Update favorite button if current idea was removed
+                        if (currentIdea && favorites.every(fav => 
+                            fav.idea !== currentIdea || fav.genre !== currentGenre
+                        )) {
+                            updateFavoriteButton(false);
+                        }
+                    });
+                });
+            }
+            
+            function toggleTheme() {
+                document.body.classList.toggle('dark-mode');
+                localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+                updateThemeIcon();
+            }
+            
+            function updateThemeIcon() {
+                const isDark = document.body.classList.contains('dark-mode');
+                themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            }
+            
+            function checkDarkMode() {
+                if (localStorage.getItem('darkMode') === 'true') {
+                    document.body.classList.add('dark-mode');
+                    updateThemeIcon();
+                }
+            }
+            
+            function capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+        });
+    </script>
+</body>
+</html>

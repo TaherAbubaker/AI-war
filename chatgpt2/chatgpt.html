@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CodeList 📝</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<style>
+    :root {
+  --bg: #f1f1f1;
+  --fg: #222;
+  --accent: #007bff;
+}
+
+body.dark {
+  --bg: #181818;
+  --fg: #f9f9f9;
+  --accent: #00d1b2;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+body {
+  font-family: sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.container {
+  width: 100%;
+  max-width: 500px;
+}
+
+h1 {
+  text-align: center;
+}
+
+form {
+  display: flex;
+  margin: 1em 0;
+}
+
+input {
+  flex: 1;
+  padding: 0.7em;
+  border: 2px solid var(--accent);
+  border-right: none;
+  outline: none;
+}
+
+button {
+  background: var(--accent);
+  border: none;
+  color: white;
+  padding: 0.7em 1em;
+  cursor: pointer;
+}
+
+.filters {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1em;
+}
+
+.filters button.active {
+  font-weight: bold;
+  border-bottom: 2px solid var(--accent);
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: #fff;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 5px solid var(--accent);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+body.dark li {
+  background: #222;
+}
+
+li.completed {
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
+li.dragging {
+  opacity: 0.5;
+  transform: scale(1.03);
+}
+
+#theme-toggle {
+  float: right;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+</style>
+<body>
+  <div class="container">
+    <h1>CodeList 🧠</h1>
+    <button id="theme-toggle">🌙</button>
+
+    <form id="todo-form">
+      <input type="text" id="todo-input" placeholder="Add a task..." required />
+      <button type="submit">Add</button>
+    </form>
+
+    <div class="filters">
+      <button data-filter="all" class="active">All</button>
+      <button data-filter="completed">Completed</button>
+      <button data-filter="pending">Pending</button>
+    </div>
+
+    <ul id="todo-list"></ul>
+  </div>
+
+  <script>
+    const form = document.getElementById("todo-form");
+const input = document.getElementById("todo-input");
+const list = document.getElementById("todo-list");
+const filterButtons = document.querySelectorAll(".filters button");
+const themeToggle = document.getElementById("theme-toggle");
+
+let todos = JSON.parse(localStorage.getItem("todos")) || [];
+let filter = "all";
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const text = input.value.trim();
+  if (text) {
+    todos.push({ text, completed: false });
+    input.value = "";
+    saveAndRender();
+  }
+});
+
+list.addEventListener("click", (e) => {
+  if (e.target.tagName === "BUTTON") {
+    const index = e.target.closest("li").dataset.index;
+    todos.splice(index, 1);
+  } else if (e.target.tagName === "LI") {
+    const index = e.target.dataset.index;
+    todos[index].completed = !todos[index].completed;
+  }
+  saveAndRender();
+});
+
+filterButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    filterButtons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    filter = btn.dataset.filter;
+    render();
+  });
+});
+
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  themeToggle.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+});
+
+function saveAndRender() {
+  localStorage.setItem("todos", JSON.stringify(todos));
+  render();
+}
+
+function render() {
+  list.innerHTML = "";
+  const filtered = todos.filter(todo =>
+    filter === "all" ? true :
+    filter === "completed" ? todo.completed :
+    !todo.completed
+  );
+
+  filtered.forEach((todo, index) => {
+    const li = document.createElement("li");
+    li.textContent = todo.text;
+    li.className = todo.completed ? "completed" : "";
+    li.setAttribute("draggable", true);
+    li.dataset.index = index;
+
+    const del = document.createElement("button");
+    del.textContent = "🗑️";
+    li.appendChild(del);
+
+    // Drag Events
+    li.addEventListener("dragstart", () => {
+      li.classList.add("dragging");
+    });
+    li.addEventListener("dragend", () => {
+      li.classList.remove("dragging");
+      updateOrder();
+    });
+
+    list.appendChild(li);
+  });
+}
+
+// Drag Sorting Logic
+list.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  const after = getDragAfterElement(list, e.clientY);
+  const dragging = document.querySelector(".dragging");
+  if (after == null) {
+    list.appendChild(dragging);
+  } else {
+    list.insertBefore(dragging, after);
+  }
+});
+
+function getDragAfterElement(container, y) {
+  const draggable = [...container.querySelectorAll("li:not(.dragging)")];
+  return draggable.reduce((closest, child) => {
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    if (offset < 0 && offset > closest.offset) {
+      return { offset, element: child };
+    }
+    return closest;
+  }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+function updateOrder() {
+  const newList = [];
+  document.querySelectorAll("#todo-list li").forEach(li => {
+    const i = li.dataset.index;
+    newList.push(todos[i]);
+  });
+  todos = newList;
+  saveAndRender();
+}
+
+// Initial render
+render();
+  </script>
+</body>
+</html>

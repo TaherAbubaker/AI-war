@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laugh Factory | Daily Dose of Humor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --accent: #FFE66D;
+            --dark: #292F36;
+            --light: #F7FFF7;
+            --shadow: 0 10px 20px rgba(0,0,0,0.1);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive, sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 0 var(--accent);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--dark);
+            opacity: 0.8;
+        }
+        
+        .joke-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 100%;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        
+        .joke-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+        }
+        
+        .joke-text {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .joke-text::before,
+        .joke-text::after {
+            content: '"';
+            font-size: 3rem;
+            color: var(--primary);
+            opacity: 0.3;
+            position: absolute;
+        }
+        
+        .joke-text::before {
+            top: -1.5rem;
+            left: -1rem;
+        }
+        
+        .joke-text::after {
+            bottom: -2.5rem;
+            right: -1rem;
+        }
+        
+        .punchline {
+            font-weight: bold;
+            color: var(--primary);
+            text-align: center;
+            font-size: 1.5rem;
+            margin-top: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+        
+        .punchline.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.4);
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(78, 205, 196, 0.6);
+        }
+        
+        .joke-counter {
+            margin-top: 2rem;
+            font-size: 1rem;
+            color: var(--dark);
+            opacity: 0.7;
+            text-align: center;
+        }
+        
+        .categories {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .category-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            background-color: var(--light);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .category-btn:hover,
+        .category-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .emoji {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: var(--dark);
+            color: white;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-link {
+            color: white;
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+        
+        .social-link:hover {
+            color: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInDown {
+            from { 
+                opacity: 0; 
+                transform: translateY(-30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateX(-30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateX(0); 
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .joke-entering {
+            animation: slideIn 0.6s ease-out forwards;
+        }
+        
+        .joke-exiting {
+            animation: fadeIn 0.4s ease-out reverse forwards;
+        }
+        
+        .laugh-emoji {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0;
+            z-index: 10;
+            animation: laugh 3s ease-out forwards;
+        }
+        
+        @keyframes laugh {
+            0% { 
+                opacity: 0; 
+                transform: translateY(0) rotate(0deg); 
+            }
+            10% { 
+                opacity: 1; 
+            }
+            90% { 
+                opacity: 1; 
+            }
+            100% { 
+                opacity: 0; 
+                transform: translateY(-100px) rotate(20deg); 
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .joke-text {
+                font-size: 1.4rem;
+            }
+            
+            .punchline {
+                font-size: 1.2rem;
+            }
+            
+            .btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .joke-container {
+                padding: 1.5rem;
+                min-height: 250px;
+            }
+            
+            .joke-text {
+                font-size: 1.2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Laugh Factory</h1>
+            <p class="subtitle">Your daily dose of humor</p>
+        </header>
+        
+        <div class="categories" id="categories">
+            <button class="category-btn active" data-category="all">All Jokes</button>
+            <button class="category-btn" data-category="programming">Programming</button>
+            <button class="category-btn" data-category="dad">Dad Jokes</button>
+            <button class="category-btn" data-category="pun">Puns</button>
+            <button class="category-btn" data-category="knock-knock">Knock-Knock</button>
+        </div>
+        
+        <div class="joke-container" id="joke-container">
+            <div class="joke-text" id="joke-text">
+                Click the button below to get your first joke!
+            </div>
+            <div class="punchline" id="punchline"></div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn btn-primary" id="new-joke-btn">
+                <i class="fas fa-grin-squint-tears emoji"></i> New Joke
+            </button>
+            <button class="btn btn-secondary" id="reveal-btn">
+                <i class="fas fa-lightbulb emoji"></i> Reveal Punchline
+            </button>
+        </div>
+        
+        <div class="joke-counter" id="joke-counter">
+            Joke count: 0
+        </div>
+    </div>
+    
+    <footer>
+        <p>Made with ❤️ and laughter</p>
+        <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const jokeText = document.getElementById('joke-text');
+            const punchline = document.getElementById('punchline');
+            const newJokeBtn = document.getElementById('new-joke-btn');
+            const revealBtn = document.getElementById('reveal-btn');
+            const jokeContainer = document.getElementById('joke-container');
+            const jokeCounter = document.getElementById('joke-counter');
+            const categoryBtns = document.querySelectorAll('.category-btn');
+            
+            // State
+            let currentJoke = null;
+            let jokeCount = 0;
+            let currentCategory = 'all';
+            
+            // Joke Database - 50 original jokes across categories
+            const jokes = [
+                // Programming Jokes
+                {
+                    setup: "Why do programmers prefer dark mode?",
+                    punchline: "Because light attracts bugs!",
+                    category: "programming"
+                },
+                {
+                    setup: "How many programmers does it take to change a light bulb?",
+                    punchline: "None, that's a hardware problem!",
+                    category: "programming"
+                },
+                {
+                    setup: "Why did the JavaScript developer go broke?",
+                    punchline: "Because he used up all his cache!",
+                    category: "programming"
+                },
+                {
+                    setup: "Why do Python developers need glasses?",
+                    punchline: "Because they can't C#!",
+                    category: "programming"
+                },
+                {
+                    setup: "What's the object-oriented way to become wealthy?",
+                    punchline: "Inheritance!",
+                    category: "programming"
+                },
+                {
+                    setup: "Why did the developer go to the shower?",
+                    punchline: "To wash away their sins (of bad code)!",
+                    category: "programming"
+                },
+                {
+                    setup: "What's a programmer's favorite hangout place?",
+                    punchline: "The Foo Bar!",
+                    category: "programming"
+                },
+                {
+                    setup: "Why did the programmer quit his job?",
+                    punchline: "Because he didn't get arrays!",
+                    category: "programming"
+                },
+                {
+                    setup: "What do you call a programmer from Finland?",
+                    punchline: "Nerdic!",
+                    category: "programming"
+                },
+                {
+                    setup: "How do you comfort a JavaScript bug?",
+                    punchline: "You console it!",
+                    category: "programming"
+                },
+                
+                // Dad Jokes
+                {
+                    setup: "Did you hear about the claustrophobic astronaut?",
+                    punchline: "He just needed a little space!",
+                    category: "dad"
+                },
+                {
+                    setup: "Why don't eggs tell jokes?",
+                    punchline: "They'd crack each other up!",
+                    category: "dad"
+                },
+                {
+                    setup: "What do you call a fake noodle?",
+                    punchline: "An impasta!",
+                    category: "dad"
+                },
+                {
+                    setup: "How do you make a tissue dance?",
+                    punchline: "Put a little boogie in it!",
+                    category: "dad"
+                },
+                {
+                    setup: "What's brown and sticky?",
+                    punchline: "A stick!",
+                    category: "dad"
+                },
+                {
+                    setup: "Why can't you explain puns to kleptomaniacs?",
+                    punchline: "They always take things literally!",
+                    category: "dad"
+                },
+                {
+                    setup: "How do you organize a space party?",
+                    punchline: "You planet!",
+                    category: "dad"
+                },
+                {
+                    setup: "What's the best thing about Switzerland?",
+                    punchline: "I don't know, but the flag is a big plus!",
+                    category: "dad"
+                },
+                {
+                    setup: "Did you hear about the mathematician who's afraid of negative numbers?",
+                    punchline: "He'll stop at nothing to avoid them!",
+                    category: "dad"
+                },
+                {
+                    setup: "Why don't scientists trust atoms?",
+                    punchline: "Because they make up everything!",
+                    category: "dad"
+                },
+                
+                // Puns
+                {
+                    setup: "I'm reading a book about anti-gravity...",
+                    punchline: "It's impossible to put down!",
+                    category: "pun"
+                },
+                {
+                    setup: "I used to be a baker...",
+                    punchline: "But I couldn't make enough dough!",
+                    category: "pun"
+                },
+                {
+                    setup: "What do you call a bear with no teeth?",
+                    punchline: "A gummy bear!",
+                    category: "pun"
+                },
+                {
+                    setup: "I would tell you a chemistry joke...",
+                    punchline: "But I know I wouldn't get a reaction!",
+                    category: "pun"
+                },
+                {
+                    setup: "Why did the scarecrow win an award?",
+                    punchline: "Because he was outstanding in his field!",
+                    category: "pun"
+                },
+                {
+                    setup: "What do you call a fish wearing a bowtie?",
+                    punchline: "Sofishticated!",
+                    category: "pun"
+                },
+                {
+                    setup: "How do you catch a squirrel?",
+                    punchline: "Climb a tree and act like a nut!",
+                    category: "pun"
+                },
+                {
+                    setup: "What's orange and sounds like a parrot?",
+                    punchline: "A carrot!",
+                    category: "pun"
+                },
+                {
+                    setup: "Did you hear about the guy who invented the knock-knock joke?",
+                    punchline: "He won the 'no-bell' prize!",
+                    category: "pun"
+                },
+                {
+                    setup: "What's the best time to go to the dentist?",
+                    punchline: "Tooth-hurty!",
+                    category: "pun"
+                },
+                
+                // Knock-Knock Jokes
+                {
+                    setup: "Knock knock. Who's there? Lettuce. Lettuce who?",
+                    punchline: "Lettuce in, it's cold out here!",
+                    category: "knock-knock"
+                },
+                {
+                    setup: "Knock knock. Who's there? Boo. Boo who?",
+                    punchline: "Don't cry, it's just a joke!",
+                    category: "knock-knock"
+                },
+                {
+                    setup: "Knock knock. Who's there? Tank. Tank who?",
+                    punchline: "You're welcome!",
+                    category: "knock-knock"
+                },
+                {
+                    setup: "Knock knock. Who's there? Olive. Olive who?",
+                    punchline: "Olive you and I miss you!",
+                    category: "knock-knock"
+                },
+                {
+                    setup: "Knock knock. Who's there? Harry. Harry who?",
+                    punchline: "Harry up and open the door!",
+                    category: "knock-knock"
+                },
+                {
+                    setup: "Knock knock. Who's there? A little old lady. A little old lady who?",
+                    punchline: "I didn't know you could yodel!",
+                    category: "knock-knock"
+                },
+                {
+                    setup: "Knock knock. Who's there? Cash. Cash who?",
+                    punchline: "No thanks, I prefer peanuts!",
+                    category: "knock-knock"
+                },
+                {
+                    setup: "Knock knock. Who's there? Banana. Banana who?",
+                    punchline: "Knock knock. Who's there? Banana. Banana who? Knock knock. Who's there? Orange. Orange who? Orange you glad I didn't say banana again?",
+                    category: "knock-knock"
+                },
+                {
+                    setup: "Knock knock. Who's there? Spell. Spell who?",
+                    punchline: "W-H-O!",
+                    category: "knock-knock"
+                },
+                {
+                    setup: "Knock knock. Who's there? Dwayne. Dwayne who?",
+                    punchline: "Dwayne the bathtub, I'm dwowning!",
+                    category: "knock-knock"
+                },
+                
+                // Bonus jokes
+                {
+                    setup: "Why don't skeletons fight each other?",
+                    punchline: "They don't have the guts!",
+                    category: "pun"
+                },
+                {
+                    setup: "What did the ocean say to the beach?",
+                    punchline: "Nothing, it just waved!",
+                    category: "pun"
+                },
+                {
+                    setup: "How do you make a lemon drop?",
+                    punchline: "Just let it fall!",
+                    category: "dad"
+                },
+                {
+                    setup: "Why did the computer go to the doctor?",
+                    punchline: "Because it had a virus!",
+                    category: "programming"
+                }
+            ];
+            
+            // Initialize
+            updateJokeCounter();
+            
+            // Event Listeners
+            newJokeBtn.addEventListener('click', getNewJoke);
+            revealBtn.addEventListener('click', revealPunchline);
+            categoryBtns.forEach(btn => btn.addEventListener('click', setCategory));
+            
+            // Functions
+            function getNewJoke() {
+                // Filter jokes by current category
+                let filteredJokes = jokes;
+                if (currentCategory !== 'all') {
+                    filteredJokes = jokes.filter(joke => joke.category === currentCategory);
+                }
+                
+                // Get random joke
+                const randomIndex = Math.floor(Math.random() * filteredJokes.length);
+                currentJoke = filteredJokes[randomIndex];
+                
+                // Animate joke transition
+                jokeContainer.classList.remove('joke-entering');
+                void jokeContainer.offsetWidth; // Trigger reflow
+                jokeContainer.classList.add('joke-entering');
+                
+                // Update display
+                jokeText.textContent = currentJoke.setup;
+                punchline.textContent = currentJoke.punchline;
+                punchline.classList.remove('revealed');
+                
+                // Increment counter
+                jokeCount++;
+                updateJokeCounter();
+                
+                // Create laughing emojis
+                createLaughEmojis();
+            }
+            
+            function revealPunchline() {
+                if (currentJoke) {
+                    punchline.classList.add('revealed');
+                }
+            }
+            
+            function setCategory(e) {
+                currentCategory = e.target.dataset.category;
+                
+                // Update active button
+                categoryBtns.forEach(btn => 
+                    btn.classList.toggle('active', btn.dataset.category === currentCategory)
+                );
+                
+                // Get new joke from this category
+                getNewJoke();
+            }
+            
+            function updateJokeCounter() {
+                jokeCounter.textContent = `Joke count: ${jokeCount}`;
+            }
+            
+            function createLaughEmojis() {
+                // Clear any existing emojis
+                document.querySelectorAll('.laugh-emoji').forEach(el => el.remove());
+                
+                // Create 5-10 laughing emojis
+                const emojiCount = Math.floor(Math.random() * 6) + 5;
+                const emojis = ['😂', '🤣', '😆', '😅', '😄', '😁'];
+                
+                for (let i = 0; i < emojiCount; i++) {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'laugh-emoji';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    
+                    // Random position
+                    const left = Math.random() * 80 + 10; // 10-90%
+                    const delay = Math.random() * 2;
+                    
+                    emoji.style.left = `${left}%`;
+                    emoji.style.bottom = '20px';
+                    emoji.style.animationDelay = `${delay}s`;
+                    
+                    jokeContainer.appendChild(emoji);
+                }
+            }
+            
+            // Get first joke
+            getNewJoke();
+        });
+    </script>
+</body>
+</html>

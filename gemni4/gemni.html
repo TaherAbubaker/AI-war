@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💡 YouTube Video Idea Generator</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts: Poppins for headings, Roboto for body -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FF0000' d='M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.776 11.238l-6.195-3.568A.998.998 0 0010 8.568v7.864a.998.998 0 001.581.828l6.195-3.568a.998.998 0 000-1.656z'/%3E%3C/svg%3E" type="image/svg+xml">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Spark Your Next Big Idea!</h1>
+            <p>Unleash your creativity with random YouTube video suggestions.</p>
+        </header>
+
+        <main class="content-section">
+            <div class="controls-panel">
+                <div class="genre-selector" role="tablist" aria-label="Select Video Genre">
+                    <button class="genre-btn active" data-genre="All" role="tab" aria-selected="true">
+                        <i class="fas fa-globe"></i> All
+                    </button>
+                    <button class="genre-btn" data-genre="Gaming" role="tab" aria-selected="false">
+                        <i class="fas fa-gamepad"></i> Gaming
+                    </button>
+                    <button class="genre-btn" data-genre="Tech" role="tab" aria-selected="false">
+                        <i class="fas fa-microchip"></i> Tech
+                    </button>
+                    <button class="genre-btn" data-genre="Vlogs" role="tab" aria-selected="false">
+                        <i class="fas fa-camera"></i> Vlogs
+                    </button>
+                    <button class="genre-btn" data-genre="Comedy" role="tab" aria-selected="false">
+                        <i class="fas fa-laugh-squint"></i> Comedy
+                    </button>
+                    <button class="genre-btn" data-genre="Education" role="tab" aria-selected="false">
+                        <i class="fas fa-book-open"></i> Education
+                    </button>
+                    <button class="genre-btn" data-genre="Horror" role="tab" aria-selected="false">
+                        <i class="fas fa-ghost"></i> Horror
+                    </button>
+                    <button class="genre-btn" data-genre="Food" role="tab" aria-selected="false">
+                        <i class="fas fa-utensils"></i> Food
+                    </button>
+                    <button class="genre-btn" data-genre="DIY" role="tab" aria-selected="false">
+                        <i class="fas fa-tools"></i> DIY
+                    </button>
+                    <button class="genre-btn" data-genre="Travel" role="tab" aria-selected="false">
+                        <i class="fas fa-plane"></i> Travel
+                    </button>
+                    <button class="genre-btn" data-genre="Music" role="tab" aria-selected="false">
+                        <i class="fas fa-music"></i> Music
+                    </button>
+                    <button class="genre-btn" data-genre="Science" role="tab" aria-selected="false">
+                        <i class="fas fa-flask"></i> Science
+                    </button>
+                    <button class="genre-btn" data-genre="Fashion" role="tab" aria-selected="false">
+                        <i class="fas fa-tshirt"></i> Fashion
+                    </button>
+                    <button class="genre-btn" data-genre="Fitness" role="tab" aria-selected="false">
+                        <i class="fas fa-dumbbell"></i> Fitness
+                    </button>
+                    <button class="genre-btn" data-genre="Art" role="tab" aria-selected="false">
+                        <i class="fas fa-paint-brush"></i> Art
+                    </button>
+                    <button class="genre-btn" data-genre="Finance" role="tab" aria-selected="false">
+                        <i class="fas fa-money-bill-wave"></i> Finance
+                    </button>
+                    <button class="genre-btn" data-genre="Lifestyle" role="tab" aria-selected="false">
+                        <i class="fas fa-heart"></i> Lifestyle
+                    </button>
+                    <button class="genre-btn favorites-btn" data-genre="Favorites" role="tab" aria-selected="false">
+                        <i class="fas fa-star"></i> Favorites
+                    </button>
+                </div>
+
+                <button id="theme-toggle-btn" class="control-btn" aria-label="Toggle light and dark theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+
+            <div id="idea-display-card" class="idea-card">
+                <p id="idea-text" aria-live="polite">Select a genre and click "Generate Idea!"</p>
+                <div class="idea-actions">
+                    <button id="copy-idea-btn" class="action-btn" aria-label="Copy idea to clipboard" title="Copy Idea">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <button id="favorite-idea-btn" class="action-btn" aria-label="Mark as favorite" title="Mark as Favorite">
+                        <i class="far fa-star"></i> <!-- Regular star for unfavorited -->
+                    </button>
+                </div>
+                <div id="no-ideas-message" class="info-message" style="display: none;">
+                    No ideas found for this genre. Try another one!
+                </div>
+            </div>
+
+            <button id="generate-idea-btn" class="generate-button" aria-controls="idea-display-card">
+                Generate Idea! <i class="fas fa-lightbulb"></i>
+            </button>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 IdeaSpark. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Modal for "View All Ideas" - Optional, but good for "win" -->
+    <div id="all-ideas-modal" class="modal" aria-modal="true" role="dialog" aria-labelledby="all-ideas-modal-title">
+        <div class="modal-content">
+            <h2 id="all-ideas-modal-title">All Video Ideas</h2>
+            <button class="close-modal-btn" aria-label="Close modal"><i class="fas fa-times"></i></button>
+            <div id="all-ideas-list" class="all-ideas-list">
+                <!-- Ideas will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+<style>
+:root {
+    --primary-bg: #f0f2f5; /* Light Gray */
+    --secondary-bg: #ffffff; /* White */
+    --accent-color: #ff416c; /* Bright Pink */
+    --accent-dark: #e03a5e; /* Darker Pink */
+    --text-color: #333;
+    --heading-color: #2c3e50; /* Dark Blue-Gray */
+    --card-shadow: rgba(0, 0, 0, 0.1);
+    --border-color: #e0e0e0;
+    --button-bg-secondary: #f0f0f0;
+    --button-text-secondary: #555;
+    --active-genre-bg: var(--accent-color);
+    --active-genre-text: white;
+    --favorites-star-color: gold;
+    --info-message-color: #888;
+}
+
+/* Dark Mode Variables */
+body.dark-mode {
+    --primary-bg: #2c3e50; /* Dark Blue-Gray */
+    --secondary-bg: #34495e; /* Darker Blue-Gray */
+    --accent-color: #2ecc71; /* Emerald Green */
+    --accent-dark: #27ae60; /* Darker Emerald Green */
+    --text-color: #ecf0f1; /* Light Gray */
+    --heading-color: #ecf0f1;
+    --card-shadow: rgba(0, 0, 0, 0.3);
+    --border-color: #444;
+    --button-bg-secondary: #444;
+    --button-text-secondary: #ecf0f1;
+    --active-genre-bg: var(--accent-color);
+    --active-genre-text: #2c3e50; /* Dark text for bright accent */
+    --favorites-star-color: #f1c40f; /* Yellow */
+    --info-message-color: #bdc3c7;
+}
+
+/* Global Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: var(--primary-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: var(--text-color);
+    line-height: 1.6;
+    transition: background-color 0.4s ease, color 0.4s ease;
+    box-sizing: border-box; /* Include padding in element's total width and height */
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.container {
+    background-color: var(--secondary-bg);
+    border-radius: 16px;
+    box-shadow: 0 15px 40px var(--card-shadow);
+    padding: 40px;
+    width: 95%;
+    max-width: 900px;
+    text-align: center;
+    position: relative;
+    overflow: hidden; /* For inner animations */
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Header */
+.header {
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-family: 'Poppins', sans-serif;
+    color: var(--heading-color);
+    font-size: 3em;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+}
+
+.header p {
+    font-size: 1.1em;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+/* Controls Panel */
+.controls-panel {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start; /* Align genre buttons to top */
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.genre-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    flex-grow: 1; /* Allow it to take available space */
+}
+
+.genre-btn, .control-btn, .generate-button, .action-btn, .modal-content button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 500;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.genre-btn {
+    background-color: var(--button-bg-secondary);
+    color: var(--button-text-secondary);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.genre-btn:hover:not(.active) {
+    background-color: var(--border-color);
+    transform: translateY(-1px);
+}
+
+.genre-btn.active {
+    background-color: var(--active-genre-bg);
+    color: var(--active-genre-text);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transform: translateY(-2px);
+}
+
+.genre-btn.favorites-btn i {
+    color: var(--favorites-star-color); /* Always show star color */
+}
+
+.control-btn {
+    background-color: var(--button-bg-secondary);
+    color: var(--button-text-secondary);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    padding: 10px 15px; /* Slightly smaller for single icon */
+}
+
+.control-btn:hover {
+    background-color: var(--border-color);
+    transform: translateY(-1px);
+}
+
+/* Idea Display Card */
+.idea-card {
+    background-color: var(--primary-bg);
+    border-radius: 12px;
+    padding: 40px 30px;
+    min-height: 150px; /* Ensure consistent height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden; /* For inner text animation */
+}
+
+#idea-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.8em;
+    font-weight: 600;
+    color: var(--heading-color);
+    margin: 0;
+    line-height: 1.4;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    position: absolute; /* For animation positioning */
+    width: calc(100% - 60px); /* Account for padding */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+}
+
+/* Idea Text Animations */
+.idea-text-exit {
+    transform: translate(-50%, -70%);
+    opacity: 0;
+}
+
+.idea-text-enter {
+    transform: translate(-50%, 70%);
+    opacity: 0;
+}
+.idea-text-enter-active {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+}
+
+.idea-actions {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.1s ease;
+    padding: 8px;
+    border-radius: 50%;
+    opacity: 0.7;
+}
+
+.action-btn:hover {
+    color: var(--accent-color);
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+.action-btn.favorited i {
+    color: var(--favorites-star-color);
+}
+
+.info-message {
+    font-size: 1.1em;
+    color: var(--info-message-color);
+    font-style: italic;
+    margin-top: 20px;
+}
+
+/* Generate Button */
+.generate-button {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 15px 35px;
+    border-radius: 50px;
+    font-size: 1.4em;
+    font-weight: 700;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    margin-top: 20px;
+}
+
+.generate-button:hover {
+    background-color: var(--accent-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+}
+
+.generate-button:active {
+    transform: translateY(0);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Loading State */
+.generate-button.loading {
+    animation: pulse 1.2s infinite;
+    cursor: not-allowed;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.02); opacity: 0.9; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Footer */
+.footer {
+    margin-top: 40px;
+    font-size: 0.9em;
+    color: var(--text-color);
+    opacity: 0.6;
+}
+
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+    background-color: var(--secondary-bg);
+    margin: auto;
+    padding: 30px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 700px;
+    box-shadow: 0 10px 30px var(--card-shadow);
+    position: relative;
+    max-height: 80vh; /* Limit height for scroll */
+    overflow-y: auto; /* Enable scrolling for content */
+    animation: slideInFromTop 0.3s ease-out;
+    text-align: left; /* Align text inside modal */
+}
+
+.modal-content h2 {
+    color: var(--heading-color);
+    font-family: 'Poppins', sans-serif;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.8em;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.close-modal-btn:hover {
+    color: var(--accent-dark);
+    transform: rotate(90deg);
+}
+
+.all-ideas-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.idea-category {
+    background-color: var(--primary-bg);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.idea-category h3 {
+    color: var(--accent-color);
+    font-family: 'Poppins', sans-serif;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.idea-category ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.idea-category li {
+    font-size: 0.95em;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    opacity: 0.9;
+}
+
+.idea-category li:last-child {
+    margin-bottom: 0;
+}
+
+/* Modal Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInFromTop {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 30px;
+        gap: 20px;
+    }
+    .header h1 {
+        font-size: 2.2em;
+    }
+    .header p {
+        font-size: 1em;
+    }
+    .genre-selector {
+        justify-content: center;
+        gap: 6px;
+    }
+    .genre-btn {
+        padding: 8px 12px;
+        font-size: 0.85em;
+        gap: 6px;
+    }
+    .control-btn {
+        padding: 8px 12px;
+    }
+    #idea-text {
+        font-size: 1.4em;
+    }
+    .idea-card {
+        padding: 30px 20px;
+        min-height: 120px;
+    }
+    .generate-button {
+        padding: 12px 25px;
+        font-size: 1.2em;
+    }
+    .idea-actions {
+        bottom: 10px;
+        right: 10px;
+    }
+    .action-btn {
+        font-size: 1em;
+        padding: 6px;
+    }
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+    .all-ideas-list {
+        grid-template-columns: 1fr; /* Stack categories on small screens */
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    .container {
+        padding: 20px;
+    }
+    .header h1 {
+        font-size: 1.8em;
+    }
+    .header p {
+        font-size: 0.9em;
+    }
+    .genre-selector {
+        flex-direction: column; /* Stack genre buttons vertically */
+        align-items: stretch; /* Stretch buttons to full width */
+        gap: 5px;
+    }
+    .genre-btn {
+        width: 100%; /* Full width buttons */
+        justify-content: center;
+    }
+    .controls-panel {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .control-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    #idea-text {
+        font-size: 1.2em;
+        width: calc(100% - 40px);
+    }
+    .idea-card {
+        min-height: 100px;
+    }
+    .generate-button {
+        font-size: 1.1em;
+        padding: 10px 20px;
+    }
+}
+</style>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    // --- DOM Elements ---
+    const genreButtons = document.querySelectorAll('.genre-btn');
+    const ideaTextElement = document.getElementById('idea-text');
+    const generateIdeaBtn = document.getElementById('generate-idea-btn');
+    const copyIdeaBtn = document.getElementById('copy-idea-btn');
+    const favoriteIdeaBtn = document.getElementById('favorite-idea-btn');
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const ideaDisplayCard = document.getElementById('idea-display-card');
+    const noIdeasMessage = document.getElementById('no-ideas-message');
+
+    // --- Data (Video Ideas) ---
+    // Each idea has a unique ID for favorite tracking
+    const videoIdeas = {
+        "All": [
+            { id: 'all-001', text: "A 'Day in the Life' of a [Specific Profession/Hobby]" },
+            { id: 'all-002', text: "Reacting to [Old/New Trend/Video]" },
+            { id: 'all-003', text: "Exploring [Abandoned Place/Hidden Gem]" },
+            { id: 'all-004', text: "My [Number] Favorite [Product/Tool/Book] of All Time" },
+            { id: 'all-005', text: "Trying [Viral Food Trend/Challenge] for the First Time" },
+            { id: 'all-006', text: "A Deep Dive into the History of [Obscure Topic]" },
+            { id: 'all-007', text: "Building [Something Creative/Useful] from Scratch" },
+            { id: 'all-008', text: "Interviewing [Interesting Person/Community Member]" },
+            { id: 'all-009', text: "The Ultimate Guide to [Beginner Skill/Software]" },
+            { id: 'all-010', text: "Debunking [Common Myth/Misconception]" }
+        ],
+        "Gaming": [
+            { id: 'game-001', text: "Speedrunning [Game Title] - Any% Category" },
+            { id: 'game-002', text: "Top 10 [Game Genre] Games You've Never Played" },
+            { id: 'game-003', text: "Can I Beat [Game Title] Using Only [Specific Item/Ability]?" },
+            { id: 'game-004', text: "Reacting to the Worst [Game Title] Glitches" },
+            { id: 'game-005', text: "A Full Playthrough of [Classic Game] with Commentary" },
+            { id: 'game-006', text: "Designing My Dream [Game Type] Level" },
+            { id: 'game-007', text: "The Lore Explained: [Game Series/Character]" },
+            { id: 'game-008', text: "Gaming Setup Tour & Cable Management Tips" },
+            { id: 'game-009', text: "Trying to Play [Difficult Game] with My Non-Gamer Friend" },
+            { id: 'game-010', text: "Analyzing the Best [Game Character] Designs" }
+        ],
+        "Tech": [
+            { id: 'tech-001', text: "Building a Custom PC for [Budget/Purpose]" },
+            { id: 'tech-002', text: "Reviewing the New [Tech Gadget/Smartphone]" },
+            { id: 'tech-003', text: "Smart Home Tour: My Automated [Room/House]" },
+            { id: 'tech-004', text: "Is [Old Tech] Still Usable in [Current Year]?" },
+            { id: 'tech-005', text: "Beginner's Guide to [Coding Language/Software]" },
+            { id: 'tech-006', text: "Unboxing & First Impressions: [New Tech Product]" },
+            { id: 'tech-007', text: "The Future of [AI/VR/Blockchain] Explained" },
+            { id: 'tech-008', text: "Tech Hacks You Didn't Know You Needed" },
+            { id: 'tech-009', text: "Comparing [Two Similar Tech Products]" },
+            { id: 'tech-010', text: "My Everyday Carry (EDC) Tech Essentials" }
+        ],
+        "Vlogs": [
+            { id: 'vlog-001', text: "A Week in My Life: [Specific Event/Challenge]" },
+            { id: 'vlog-002', text: "Morning Routine: Productive Habits for Success" },
+            { id: 'vlog-003', text: "Exploring My City's [Hidden Gems/Best Food Spots]" },
+            { id: 'vlog-004', text: "What I Eat in a Day: [Diet Type/Goal]" },
+            { id: 'vlog-005', text: "Behind the Scenes: How I [Create Content/Work]" },
+            { id: 'vlog-006', text: "Q&A Session: Answering Your Most Asked Questions" },
+            { id: 'vlog-007', text: "My Current Favorite Things: [Beauty/Fashion/Lifestyle]" },
+            { id: 'vlog-008', text: "Decluttering My [Room/Workspace]: Minimalist Journey" },
+            { id: 'vlog-009', text: "Trying a New Hobby for [Number] Days" },
+            { id: 'vlog-010', text: "Road Trip Vlog: [Destination] Adventures" }
+        ],
+        "Comedy": [
+            { id: 'com-001', text: "Reacting to Cringey [Old Videos/Trends]" },
+            { id: 'com-002', text: "Trying to Survive [Absurd Challenge] for 24 Hours" },
+            { id: 'com-003', text: "My Awkward Dating Stories (Animated)" },
+            { id: 'com-004', text: "Parodying [Popular Song/Movie Scene]" },
+            { id: 'com-005', text: "If [Everyday Object] Could Talk" },
+            { id: 'com-006', text: "Roasting My [Friends/Family/Old Self]" },
+            { id: 'com-007', text: "Trying to Cook [Complex Dish] with No Experience" },
+            { id: 'com-008', text: "Hilarious Misconceptions I Had as a Kid" },
+            { id: 'com-009', text: "Bad Advice with [Your Name]" },
+            { id: 'com-010', text: "My Top 5 Funniest Internet Moments" }
+        ],
+        "Education": [
+            { id: 'edu-001', text: "The Science Behind [Everyday Phenomenon]" },
+            { id: 'edu-002', text: "How to Learn [New Skill] in [Timeframe]" },
+            { id: 'edu-003', text: "Understanding [Complex Historical Event] in 5 Minutes" },
+            { id: 'edu-004', text: "Common Mistakes When [Doing Something] & How to Fix Them" },
+            { id: 'edu-005', text: "A Visual Guide to [Abstract Concept]" },
+            { id: 'edu-006', text: "The Psychology of [Human Behavior]" },
+            { id: 'edu-007', text: "Demystifying [Scientific Jargon]" },
+            { id: 'edu-008', text: "Tips for [Studying/Productivity/Time Management]" },
+            { id: 'edu-009', text: "Exploring the World's [Most Endangered Species]" },
+            { id: 'edu-010', text: "The History of [Invention/Discovery]" }
+        ],
+        "Horror": [
+            { id: 'hor-001', text: "Reacting to the Scariest [Game Jumpscares/Movie Scenes]" },
+            { id: 'hor-002', text: "Real-Life Paranormal Encounters: My Story" },
+            { id: 'hor-003', text: "Top 5 Underrated Horror Movies You Need to See" },
+            { id: 'hor-004', text: "Exploring [Haunted Location] at Night" },
+            { id: 'hor-005', text: "Analyzing the Psychology of [Horror Villain]" },
+            { id: 'hor-006', text: "Creepy Urban Legends from Around the World" },
+            { id: 'hor-007', text: "Reading Scary Stories from Reddit (NoSleep)" },
+            { id: 'hor-008', text: "My Experience with [Sleep Paralysis/Night Terrors]" },
+            { id: 'hor-009', text: "Debunking Famous Ghost Sightings" },
+            { id: 'hor-010', text: "Creating a Horror Short Film in [Timeframe]" }
+        ],
+        "Food": [
+            { id: 'food-001', text: "Trying Every [Fast Food Item/Snack] from [Country]" },
+            { id: 'food-002', text: "Cooking a 3-Course Meal Using Only [One Ingredient]" },
+            { id: 'food-003', text: "Blind Taste Test: [Brand A] vs. [Brand B]" },
+            { id: 'food-004', text: "Recreating a Famous [Restaurant Dish] at Home" },
+            { id: 'food-005', text: "Food Hacks That Will Change Your Life" },
+            { id: 'food-006', text: "Exploring the Best [Cuisine Type] Street Food" },
+            { id: 'food-007', text: "Baking [Complex Dessert] for the First Time" },
+            { id: 'food-008', text: "My Go-To Quick & Easy Meal Prep Ideas" },
+            { id: 'food-009', text: "Trying Weird Food Combinations" },
+            { id: 'food-010', text: "Reviewing [New Food Product/Diet Trend]" }
+        ],
+        "DIY": [
+            { id: 'diy-001', text: "Building My Own [Furniture Item/Desk Setup]" },
+            { id: 'diy-002', text: "DIY Room Makeover for Under [Budget]" },
+            { id: 'diy-003', text: "Restoring [Old Item] to Its Former Glory" },
+            { id: 'diy-004', text: "Life Hacks Using Only [Common Household Item]" },
+            { id: 'diy-005', text: "Beginner's Guide to [Woodworking/Knitting/Painting]" },
+            { id: 'diy-006', text: "Creating Custom [Decor Item] from Recycled Materials" },
+            { id: 'diy-007', text: "How to Fix [Common Household Problem]" },
+            { id: 'diy-008', text: "Making Handmade Gifts for [Occasion]" },
+            { id: 'diy-009', text: "Building a [Garden/Small Project] in My Backyard" },
+            { id: 'diy-010', text: "Upcycling Old Clothes into New Fashion" }
+        ],
+        "Travel": [
+            { id: 'travel-001', text: "Solo Travel Guide to [City/Country]" },
+            { id: 'travel-002', text: "Top 10 Must-Visit Places in [Continent/Region]" },
+            { id: 'travel-003', text: "Budget Travel Hacks: How to See the World for Less" },
+            { id: 'travel-004', text: "Exploring the Culture & Cuisine of [New Country]" },
+            { id: 'travel-005', text: "Packing Essentials for [Type of Trip]" },
+            { id: 'travel-006', text: "My Most Memorable Travel Disasters & How I Dealt With Them" },
+            { id: 'travel-007', text: "Hidden Gems: Discovering [Underrated Travel Destination]" },
+            { id: 'travel-008', text: "A Day in the Life of a Digital Nomad" },
+            { id: 'travel-009', text: "Ultimate Guide to [Specific Type of Travel - e.g., Backpacking]" },
+            { id: 'travel-010', text: "Travel Photography Tips for Beginners" }
+        ],
+        "Music": [
+            { id: 'music-001', text: "Deconstructing [Popular Song]: What Makes It Great?" },
+            { id: 'music-002', text: "Learning to Play [Instrument] in [Timeframe]" },
+            { id: 'music-003', text: "My Top 10 [Genre] Albums of All Time" },
+            { id: 'music-004', text: "Reacting to [New Music Video/Artist]" },
+            { id: 'music-005', text: "Behind the Scenes of My Songwriting Process" },
+            { id: 'music-006', text: "The Evolution of [Music Genre]" },
+            { id: 'music-007', text: "Covering [Difficult Song] on [Instrument]" },
+            { id: 'music-008', text: "Music Theory Explained: [Basic Concept]" },
+            { id: 'music-009', text: "Building My Dream Home Studio Setup" },
+            { id: 'music-010', text: "Exploring the History of [Specific Instrument]" }
+        ],
+        "Science": [
+            { id: 'sci-001', text: "Explaining Quantum Physics to a Child" },
+            { id: 'sci-002', text: "The Science of Sleep: Why We Need It" },
+            { id: 'sci-003', text: "Exploring the Deep Sea: What Lies Beneath?" },
+            { id: 'sci-004', text: "How [Technology/Concept] Works: Simplified" },
+            { id: 'sci-005', text: "The Future of Space Travel: Mars and Beyond" },
+            { id: 'sci-006', text: "Debunking Common Health Myths" },
+            { id: 'sci-007', text: "Understanding Climate Change: Causes and Solutions" },
+            { id: 'sci-008', text: "The Wonders of the Human Brain" },
+            { id: 'sci-009', text: "Experiments You Can Do at Home" },
+            { id: 'sci-010', text: "The Physics of [Everyday Sport/Activity]" }
+        ],
+        "Fashion": [
+            { id: 'fash-001', text: "My [Season] Wardrobe Essentials" },
+            { id: 'fash-002', text: "Thrift Store Haul & Styling Challenge" },
+            { id: 'fash-003', text: "Building a Capsule Wardrobe: Tips & Tricks" },
+            { id: 'fash-004', text: "Fashion Trends I Love/Hate Right Now" },
+            { id: 'fash-005', text: "Styling [One Item] in 5 Different Ways" },
+            { id: 'fash-006', text: "DIY Fashion: Customizing Old Clothes" },
+            { id: 'fash-007', text: "The History of [Fashion Item/Era]" },
+            { id: 'fash-008', text: "Sustainable Fashion: Brands & Tips" },
+            { id: 'fash-009', text: "My Everyday Makeup & Hair Routine" },
+            { id: 'fash-010', text: "Affordable Fashion Finds: Where to Shop" }
+        ],
+        "Fitness": [
+            { id: 'fit-001', text: "Beginner's Guide to [Workout Type - e.g., Weightlifting]" },
+            { id: 'fit-002', text: "My [Number]-Day Fitness Challenge Transformation" },
+            { id: 'fit-003', text: "Home Workout Routine (No Equipment Needed)" },
+            { id: 'fit-004', text: "Healthy Meal Prep Ideas for Busy People" },
+            { id: 'fit-005', text: "Common Fitness Myths Debunked" },
+            { id: 'fit-006', text: "How to Stay Motivated on Your Fitness Journey" },
+            { id: 'fit-007', text: "Reviewing [Fitness App/Equipment]" },
+            { id: 'fit-008', text: "The Best [Type of Exercise] for [Goal]" },
+            { id: 'fit-009', text: "My Favorite Healthy Snack Recipes" },
+            { id: 'fit-010', text: "Understanding Macros: A Simple Explanation" }
+        ],
+        "Art": [
+            { id: 'art-001', text: "Drawing/Painting Challenge: [Specific Theme/Style]" },
+            { id: 'art-002', text: "Beginner's Guide to [Art Medium - e.g., Watercolor]" },
+            { id: 'art-003', text: "My Art Studio Tour & Organization Tips" },
+            { id: 'art-004', text: "Exploring Different Art Styles Throughout History" },
+            { id: 'art-005', text: "Creating Digital Art from Scratch" },
+            { id: 'art-006', text: "Art Supplies Haul & Review" },
+            { id: 'art-007', text: "How to Overcome Artist's Block" },
+            { id: 'art-008', text: "Speed Painting [Object/Scene] in [Timeframe]" },
+            { id: 'art-009', text: "The Psychology of Color in Art" },
+            { id: 'art-010', text: "Collaborative Art Project with [Another Artist]" }
+        ],
+        "Finance": [
+            { id: 'fin-001', text: "Budgeting 101: How to Manage Your Money" },
+            { id: 'fin-002', text: "Investing for Beginners: Stocks, Crypto, Real Estate" },
+            { id: 'fin-003', text: "My Journey to Financial Independence" },
+            { id: 'fin-004', text: "Understanding Credit Scores & How to Improve Them" },
+            { id: 'fin-005', text: "Side Hustle Ideas to Make Extra Money" },
+            { id: 'fin-006', text: "The Psychology of Money: Why We Spend" },
+            { id: 'fin-007', text: "Saving for a Big Purchase: Tips & Strategies" },
+            { id: 'fin-008', text: "Retirement Planning: Early vs. Late" },
+            { id: 'fin-009', text: "Common Financial Mistakes to Avoid" },
+            { id: 'fin-010', text: "How to Negotiate Your Salary Effectively" }
+        ],
+        "Lifestyle": [
+            { id: 'life-001', text: "My Self-Care Routine for Mental Wellness" },
+            { id: 'life-002', text: "Organizing My [Home Area/Digital Files]" },
+            { id: 'life-003', text: "Developing a Morning/Evening Routine for Productivity" },
+            { id: 'life-004', text: "My Favorite Books/Podcasts for Personal Growth" },
+            { id: 'life-005', text: "Mindfulness & Meditation for Beginners" },
+            { id: 'life-006', text: "Creating a Vision Board for Your Goals" },
+            { id: 'life-007', text: "How to Build Healthy Habits (and Break Bad Ones)" },
+            { id: 'life-008', text: "My Journey to a More Sustainable Lifestyle" },
+            { id: 'life-009', text: "Exploring Different Productivity Methods" },
+            { id: 'life-010', text: "Tips for Better Sleep & Energy" }
+        ]
+    };
+
+    // --- State Variables ---
+    let currentGenre = 'All'; // Default genre
+    let lastIdeaId = null; // To prevent immediate repeats
+    let favorites = new Set(); // Stores IDs of favorited ideas
+
+    // --- Helper Functions ---
+
+    /**
+     * Retrieves a random idea from the filtered list, avoiding immediate repeats.
+     * @param {string} genre - The current genre selected.
+     * @returns {Object|null} An idea object or null if no ideas are available.
+     */
+    const getRandomIdea = (genre) => {
+        let availableIdeas = [];
+
+        if (genre === 'Favorites') {
+            // Filter all ideas to find those marked as favorites
+            Object.values(videoIdeas).forEach(genreIdeas => {
+                genreIdeas.forEach(idea => {
+                    if (favorites.has(idea.id)) {
+                        availableIdeas.push(idea);
+                    }
+                });
+            });
+        } else {
+            availableIdeas = videoIdeas[genre] || [];
+        }
+
+        if (availableIdeas.length === 0) {
+            return null; // No ideas in this category or no favorites
+        }
+
+        if (availableIdeas.length === 1 && availableIdeas[0].id === lastIdeaId) {
+            // If only one idea and it's the same as last, return it anyway
+            return availableIdeas[0];
+        }
+
+        let randomIndex;
+        let selectedIdea;
+        do {
+            randomIndex = Math.floor(Math.random() * availableIdeas.length);
+            selectedIdea = availableIdeas[randomIndex];
+        } while (selectedIdea.id === lastIdeaId); // Ensure not the immediate same idea
+
+        lastIdeaId = selectedIdea.id; // Update last displayed idea
+        return selectedIdea;
+    };
+
+    /**
+     * Updates the UI to display a new video idea with animation.
+     */
+    const displayNewIdea = () => {
+        // Disable button and add loading state
+        generateIdeaBtn.classList.add('loading');
+        generateIdeaBtn.disabled = true;
+        genreButtons.forEach(btn => btn.disabled = true); // Disable genre buttons too
+
+        // Step 1: Animate current idea out
+        ideaTextElement.classList.add('idea-text-exit');
+        favoriteIdeaBtn.classList.remove('favorited'); // Reset favorite state visually
+        favoriteIdeaBtn.querySelector('i').classList.replace('fas', 'far');
+
+        setTimeout(() => {
+            // Step 2: Get new idea and update text
+            const idea = getRandomIdea(currentGenre);
+
+            if (idea) {
+                ideaTextElement.textContent = idea.text;
+                ideaTextElement.dataset.id = idea.id; // Store ID on element for favoriting
+                noIdeasMessage.style.display = 'none'; // Hide no ideas message
+                ideaTextElement.style.display = 'block'; // Show idea text
+                updateFavoriteButtonState(idea.id); // Update favorite button for new idea
+                copyIdeaBtn.style.display = 'inline-flex'; // Show copy button
+                favoriteIdeaBtn.style.display = 'inline-flex'; // Show favorite button
+            } else {
+                ideaTextElement.textContent = ''; // Clear text
+                ideaTextElement.style.display = 'none'; // Hide idea text
+                noIdeasMessage.style.display = 'block'; // Show no ideas message
+                ideaTextElement.dataset.id = ''; // Clear ID
+                copyIdeaBtn.style.display = 'none'; // Hide copy button
+                favoriteIdeaBtn.style.display = 'none'; // Hide favorite button
+            }
+
+            // Step 3: Prepare for new idea animation
+            ideaTextElement.classList.remove('idea-text-exit');
+            ideaTextElement.classList.add('idea-text-enter');
+
+            // Force reflow to restart CSS animation (important for re-triggering 'enter' animation)
+            void ideaTextElement.offsetWidth;
+
+            // Step 4: Animate new idea in
+            ideaTextElement.classList.add('idea-text-enter-active');
+
+            // Re-enable buttons after animation completes
+            setTimeout(() => {
+                generateIdeaBtn.classList.remove('loading');
+                generateIdeaBtn.disabled = false;
+                genreButtons.forEach(btn => btn.disabled = false);
+            }, 300); // Matches CSS enter animation duration
+        }, 300); // Duration matches CSS exit animation
+    };
+
+    /**
+     * Handles genre selection, updates active button, and generates a new idea.
+     * @param {string} genre - The genre to select.
+     */
+    const selectGenre = (genre) => {
+        currentGenre = genre;
+        lastIdeaId = null; // Reset last idea to allow any idea from new genre
+
+        // Update active class on genre buttons
+        genreButtons.forEach(btn => {
+            if (btn.dataset.genre === genre) {
+                btn.classList.add('active');
+                btn.setAttribute('aria-selected', 'true');
+            } else {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-selected', 'false');
+            }
+        });
+
+        displayNewIdea(); // Generate a new idea for the selected genre
+    };
+
+    /**
+     * Copies the current idea text to the clipboard and provides visual feedback.
+     */
+    const copyIdeaToClipboard = async () => {
+        const idea = ideaTextElement.textContent;
+        if (!idea || idea === noIdeasMessage.textContent) {
+            // Don't copy if there's no actual idea displayed
+            return;
+        }
+        try {
+            await navigator.clipboard.writeText(idea);
+            const originalIcon = copyIdeaBtn.innerHTML;
+            copyIdeaBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            copyIdeaBtn.classList.add('copied'); // Add a class for potential styling feedback
+
+            if (navigator.vibrate) navigator.vibrate(50); // Haptic feedback for mobile
+
+            setTimeout(() => {
+                copyIdeaBtn.innerHTML = originalIcon;
+                copyIdeaBtn.classList.remove('copied');
+            }, 1500);
+        } catch (err) {
+            console.error('Failed to copy idea: ', err);
+            // Fallback for older browsers or restricted environments
+            alert('Failed to copy idea. Please copy manually: ' + idea);
+        }
+    };
+
+    /**
+     * Toggles the favorite status of the currently displayed idea.
+     */
+    const toggleFavorite = () => {
+        const currentIdeaId = ideaTextElement.dataset.id;
+        if (!currentIdeaId) return; // No idea displayed
+
+        if (favorites.has(currentIdeaId)) {
+            favorites.delete(currentIdeaId);
+        } else {
+            favorites.add(currentIdeaId);
+        }
+        saveFavorites();
+        updateFavoriteButtonState(currentIdeaId);
+
+        // If currently viewing favorites and unfavoriting the last one, refresh the view
+        if (currentGenre === 'Favorites' && favorites.size === 0) {
+            displayNewIdea(); // Re-render favorites view, which will show "no ideas"
+        }
+    };
+
+    /**
+     * Updates the favorite button's icon and class based on an idea's favorite status.
+     * @param {string} ideaId - The ID of the idea to check.
+     */
+    const updateFavoriteButtonState = (ideaId) => {
+        const icon = favoriteIdeaBtn.querySelector('i');
+        if (favorites.has(ideaId)) {
+            favoriteIdeaBtn.classList.add('favorited');
+            icon.classList.replace('far', 'fas'); // Solid star
+        } else {
+            favoriteIdeaBtn.classList.remove('favorited');
+            icon.classList.replace('fas', 'far'); // Outline star
+        }
+    };
+
+    /**
+     * Saves the current favorites set to localStorage.
+     */
+    const saveFavorites = () => {
+        localStorage.setItem('youtubeIdeaFavorites', JSON.stringify(Array.from(favorites)));
+    };
+
+    /**
+     * Loads favorites from localStorage on app initialization.
+     */
+    const loadFavorites = () => {
+        const storedFavorites = localStorage.getItem('youtubeIdeaFavorites');
+        if (storedFavorites) {
+            favorites = new Set(JSON.parse(storedFavorites));
+        }
+    };
+
+    /**
+     * Loads the user's preferred theme from localStorage.
+     */
+    const loadTheme = () => {
+        const savedTheme = localStorage.getItem('youtubeIdeaTheme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeToggleBtn.querySelector('i').classList.replace('fa-moon', 'fa-sun'); // Change icon to sun
+        } else {
+            themeToggleBtn.querySelector('i').classList.replace('fa-sun', 'fa-moon'); // Change icon to moon
+        }
+    };
+
+    /**
+     * Toggles between light and dark themes and saves the preference.
+     */
+    const toggleTheme = () => {
+        document.body.classList.toggle('dark-mode');
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        localStorage.setItem('youtubeIdeaTheme', isDarkMode ? 'dark' : 'light');
+
+        const icon = themeToggleBtn.querySelector('i');
+        if (isDarkMode) {
+            icon.classList.replace('fa-moon', 'fa-sun');
+        } else {
+            icon.classList.replace('fa-sun', 'fa-moon');
+        }
+    };
+
+    // --- Event Listeners ---
+
+    // Generate Idea Button
+    generateIdeaBtn.addEventListener('click', displayNewIdea);
+
+    // Genre Buttons
+    genreButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            selectGenre(button.dataset.genre);
+        });
+    });
+
+    // Copy Idea Button
+    copyIdeaBtn.addEventListener('click', copyIdeaToClipboard);
+
+    // Favorite Idea Button
+    favoriteIdeaBtn.addEventListener('click', toggleFavorite);
+
+    // Theme Toggle Button
+    themeToggleBtn.addEventListener('click', toggleTheme);
+
+    // --- Initial Load ---
+    loadTheme();
+    loadFavorites();
+    selectGenre(currentGenre); // Initialize with 'All' genre and display first idea
+});
+
+</script>

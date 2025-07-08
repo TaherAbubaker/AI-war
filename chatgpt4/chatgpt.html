@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Video Idea Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(to right, #1d2b64, #f8cdda);
+      color: #fff;
+      transition: background 0.4s ease;
+    }
+    .container {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+    }
+    select, button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      margin: 10px 5px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    select {
+      background: #fff;
+      color: #333;
+    }
+    button {
+      background-color: #e63946;
+      color: #fff;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #d62828;
+    }
+    .idea-box {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      font-size: 1.2rem;
+      min-height: 60px;
+      transition: all 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎥 YouTube Video Idea Generator</h1>
+    <select id="genreSelect">
+      <option value="gaming">🎮 Gaming</option>
+      <option value="tech">💻 Tech</option>
+      <option value="vlogs">📹 Vlogs</option>
+      <option value="comedy">🤣 Comedy</option>
+      <option value="education">📘 Education</option>
+      <option value="horror">👻 Horror</option>
+    </select>
+    <button onclick="generateIdea()">Generate Idea</button>
+    <div class="idea-box" id="ideaBox">Pick a genre and click the button!</div>
+  </div>
+
+  <script>
+    const ideas = {
+      gaming: [
+        "Top 10 Game Glitches You Won’t Believe",
+        "Speedrun Challenge with a Twist",
+        "Reacting to My First Minecraft World",
+        "24 Hours Gaming Stream Vlog",
+        "Can You Beat This Game Blindfolded?"
+      ],
+      tech: [
+        "Best Budget Tech Under $50",
+        "AI Tools That Will Blow Your Mind",
+        "Building a PC in 2025",
+        "React vs Vue: Frontend Face-Off",
+        "I Tried Coding for 24 Hours – Here's What Happened"
+      ],
+      vlogs: [
+        "My Daily Routine as a Student",
+        "Weekend Getaway Vlog",
+        "A Day Without Social Media",
+        "Spending 24 Hours in a Tiny Room",
+        "Vlogging My First Public Speaking Experience"
+      ],
+      comedy: [
+        "Types of People in Zoom Calls 😂",
+        "Recreating Cringe TikToks",
+        "Trolling My Friends with Voice AI",
+        "If Google Was a Person",
+        "Trying Not to Laugh – Impossible Edition"
+      ],
+      education: [
+        "5 Habits That Boost Productivity",
+        "How to Learn Anything Fast",
+        "Explaining Quantum Physics Like You're 5",
+        "Study Hacks No One Talks About",
+        "Best Books to Read Before You Turn 25"
+      ],
+      horror: [
+        "Exploring a Real Abandoned Hospital",
+        "Reacting to Creepy Internet Stories",
+        "Horror Game with No Lights Challenge",
+        "Scary Stories from Reddit – Voice Over Style",
+        "Haunted House Overnight Challenge"
+      ]
+    };
+
+    function generateIdea() {
+      const genre = document.getElementById("genreSelect").value;
+      const ideaBox = document.getElementById("ideaBox");
+      const genreIdeas = ideas[genre];
+      const randomIdea = genreIdeas[Math.floor(Math.random() * genreIdeas.length)];
+      ideaBox.textContent = randomIdea;
+    }
+  </script>
+</body>
+</html>

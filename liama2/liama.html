@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>body {
+    font-family: Arial, sans-serif;
+    transition: background-color 0.5s ease;
+}
+
+.light-mode {
+    background-color: #f0f0f0;
+}
+
+.dark-mode {
+    background-color: #333;
+    color: white;
+}
+
+.theme-toggle {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.filter-buttons {
+    margin: 20px auto;
+    text-align: center;
+}
+
+.filter-btn {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.filter-btn.active {
+    background-color: #007bff;
+    color: white;
+}
+
+#task-input {
+    width: 70%;
+    height: 30px;
+    margin: 20px auto;
+    display: block;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#add-task-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#add-task-btn:hover {
+    background-color: #0056b3;
+}
+
+#task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    width: 70%;
+}
+
+.task {
+    background-color: #fff;
+    color: #333;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.task.completed {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.dark-mode .task {
+    background-color: #444;
+    color: #fff;
+    border: 1px solid #555;
+}
+
+.sortable-ghost {
+    opacity: 0;
+}
+
+.sortable-drag {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+</style>
+<body>
+    <div class="theme-toggle">
+        <input type="checkbox" id="theme-switch" />
+        <label for="theme-switch">Toggle Theme</label>
+    </div>
+    <div class="filter-buttons">
+        <button class="filter-btn active" id="all-filter">All</button>
+        <button class="filter-btn" id="completed-filter">Completed</button>
+        <button class="filter-btn" id="pending-filter">Pending</button>
+    </div>
+    <input type="text" id="task-input" placeholder="Add new task">
+    <button id="add-task-btn">Add Task</button>
+    <ul id="task-list" class="sortable"></ul>
+
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script>
+        // Selectors
+const themeSwitch = document.getElementById('theme-switch');
+const taskInput = document.getElementById('task-input');
+const addTaskBtn = document.getElementById('add-task-btn');
+const taskList = document.getElementById('task-list');
+    </script>
+</body>
+</html>
