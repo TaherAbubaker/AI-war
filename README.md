@@ -7,6 +7,7 @@ The mission: **Who can build the cleanest, most complete front-end project**?
 
 🧠 *All scores are based on creativity, usability, code quality, UI, and working features.*
 
+![AI WAR Banner](ai.png)
 ---
 
 ## 🧪 BATTLE 1 — Responsive Website (MVP Style)
